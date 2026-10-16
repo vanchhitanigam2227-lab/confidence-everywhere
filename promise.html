@@ -1,0 +1,320 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>Confidence Promise Card</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centred column; the card is the hero, then a benefit explorer, then a live Promise-vs-discount comparison. Single dark look by choice (a premium ownership card). */
+:root{
+  --ink:#070C2E;        /* page ground, deep navy */
+  --panel:#0F1846;      /* raised surfaces */
+  --line:#26306A;       /* hairlines */
+  --text:#EEF1FB;       /* primary text */
+  --muted:#A3ACD3;      /* secondary text */
+  --blue:#4E6BFF;       /* interactive accent */
+  --red:#E3343B;        /* brand red, used sparingly */
+  --gold:#E8C77A;       /* card foil */
+  --good:#4CC38A; --warn:#F0B44C;
+  --f-display:"Saira Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ink);color:var(--text);font-family:var(--f-body);font-size:16px;line-height:1.5;margin:0}
+.wrap{max-width:1060px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.concept{background:var(--red);color:#fff;font-size:13px;font-weight:600;letter-spacing:.02em}
+.concept .wrap{padding-block:8px;display:flex;gap:8px 16px;flex-wrap:wrap;justify-content:space-between}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:.01em}
+h1{font-size:clamp(34px,6vw,56px);line-height:1;font-weight:800;text-transform:uppercase}
+h2{font-size:clamp(26px,3.6vw,36px);font-weight:700;text-transform:uppercase;line-height:1.05}
+h3{font-size:22px;font-weight:700}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+p{margin:0}
+.lede{color:var(--muted);max-width:60ch;font-size:17px}
+section{padding-top:56px;display:grid;gap:20px}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding-top:36px}
+.hero > *{min-width:0}
+.hero .copy{display:grid;gap:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--muted)}
+.chip b{color:var(--text);font-weight:600}
+
+.cardzone{perspective:1400px}
+.card{position:relative;width:100%;max-width:460px;aspect-ratio:1.586;margin-inline:auto;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.7,.2,1);cursor:pointer;border:0;padding:0;background:none;color:inherit;font:inherit;display:block}
+.card.flipped{transform:rotateY(180deg)}
+.card:focus-visible{outline:3px solid var(--blue);outline-offset:6px;border-radius:20px}
+.face{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;box-shadow:0 30px 60px -20px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.08)}
+.front{background:
+  radial-gradient(120% 90% at 85% 10%,rgba(78,107,255,.55),transparent 55%),
+  radial-gradient(90% 80% at 0% 100%,rgba(227,52,59,.45),transparent 60%),
+  linear-gradient(135deg,#0B1347,#15237A 60%,#0B1347)}
+.front::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 9px);pointer-events:none}
+.back{background:linear-gradient(160deg,#121C55,#070C2E);transform:rotateY(180deg)}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
+.chipgold{width:46px;height:34px;border-radius:7px;background:linear-gradient(135deg,#F6E3A8,#C9A04E 55%,#F1D891);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.chipgold::before{content:"";display:block;margin:7px 9px;height:20px;border:1px solid rgba(0,0,0,.25);border-radius:4px}
+.cname{font-family:var(--f-display);font-weight:800;font-size:clamp(22px,4.4vw,30px);line-height:.95;text-transform:uppercase;letter-spacing:.03em}
+.cname span{display:block;color:var(--gold)}
+.cnum{font-family:var(--f-mono);font-size:clamp(13px,2.4vw,16px);letter-spacing:.18em;position:relative;z-index:1}
+.cmeta{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#C8CFF0}
+.cmeta b{display:block;color:#fff;font-size:12px;font-weight:600;letter-spacing:.06em;margin-top:2px}
+.backlist{display:grid;gap:8px;font-size:14px}
+.backlist div{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start}
+.backlist i{font-style:normal;font-family:var(--f-mono);color:var(--gold);font-size:12px;padding-top:2px}
+.stripe{height:30px;background:#03061A;margin:-22px -24px 4px}
+.hint{font-family:var(--f-mono);font-size:12px;color:var(--muted);text-align:center;margin-top:14px}
+
+/* BENEFIT EXPLORER */
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{font:600 15px var(--f-body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.tab .k{font-family:var(--f-mono);font-size:11px;color:var(--gold)}
+.tab[aria-selected="true"]{background:var(--text);color:var(--ink);border-color:var(--text)}
+.tab[aria-selected="true"] .k{color:var(--red)}
+.tab:focus-visible,.seg button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+.panel > *{min-width:0}
+.panel .main{display:grid;gap:14px;align-content:start}
+.big{font-family:var(--f-display);font-weight:800;font-size:clamp(40px,7vw,64px);line-height:.9;color:var(--text)}
+.big small{font-size:.42em;color:var(--muted);font-weight:600;margin-left:6px}
+.facts{display:grid;gap:0;align-content:start}
+.fact{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.fact:last-child{border-bottom:1px solid var(--line)}
+.fact dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.fact dd{margin:0}
+.scenario{border-left:3px solid var(--gold);padding:4px 0 4px 14px;color:var(--text);font-size:15px}
+.scenario b{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:2px;font-weight:500}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);vertical-align:2px}
+.tag.F{color:var(--good);border-color:rgba(76,195,138,.5)}
+.tag.E{color:var(--warn);border-color:rgba(240,180,76,.5)}
+.tag.P{color:#9DB2FF;border-color:rgba(157,178,255,.5)}
+
+/* COMPARE */
+.cmp{display:grid;grid-template-columns:320px 1fr;gap:24px}
+.cmp > *{min-width:0}
+.controls{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:18px;align-content:start}
+.ctl{display:grid;gap:6px}
+.ctl label,.ctl .lab{font-size:14px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.ctl output{font-family:var(--f-mono);font-weight:500;color:var(--gold)}
+input[type=range]{width:100%;accent-color:var(--blue)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{flex:1;font:600 14px var(--f-body);background:transparent;color:var(--muted);border:0;padding:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--blue);color:#fff}
+.result{display:grid;gap:16px}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.offer{border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:10px;align-content:start;background:var(--panel)}
+.offer.win{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.offer h3{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.badge{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--gold);color:var(--ink)}
+.amount{font-family:var(--f-display);font-weight:800;font-size:clamp(36px,5vw,48px);line-height:1;font-variant-numeric:tabular-nums}
+.amount small{font-size:.4em;color:var(--muted);font-weight:600}
+.lines{display:grid;gap:6px;font-size:14px}
+.lines div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:5px}
+.lines span:last-child{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bars{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:12px}
+.bar{display:grid;grid-template-columns:150px 1fr 90px;gap:12px;align-items:center;font-size:14px}
+.track{height:14px;background:#1A2460;border-radius:7px;overflow:hidden}
+.fill{height:100%;border-radius:7px;transition:width .5s ease}
+.bar .v{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:var(--muted)}
+.makerside{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ms{border-top:2px solid var(--line);padding-top:12px;display:grid;gap:4px}
+.ms .n{font-family:var(--f-display);font-weight:800;font-size:34px;line-height:1}
+.ms p{font-size:14px;color:var(--muted)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:grid;gap:8px}
+footer a{color:#B9C6FF}
+@media (max-width:820px){
+  .hero,.panel,.cmp{grid-template-columns:1fr}
+  .makerside{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .duel{grid-template-columns:1fr}
+  .bar{grid-template-columns:1fr 70px}
+  .bar .track{grid-column:1/-1;grid-row:2}
+  .fact{grid-template-columns:1fr;gap:2px}
+  .face{padding:16px 18px}
+  .stripe{margin:-16px -18px 4px;height:24px}
+  .backlist{font-size:12.5px;gap:5px}
+}
+@media (prefers-reduced-motion:reduce){.card,.fill{transition:none}}
+</style>
+
+<div class="concept"><div class="wrap"><span>Concept prototype by Team Xlerites404, XLRI Jamshedpur, for Maruti Suzuki XCELerate 2026 (B-Track)</span><span>Not an official Maruti Suzuki page. Proposed terms; values marked E are team estimates.</span></div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="copy">
+      <div class="eyebrow">Proposed for every Nexa SUV</div>
+      <h1>The Confidence Promise</h1>
+      <p class="lede">Instead of a cash discount at the table, the buyer gets a written promise that holds for five years: longer cover, help anywhere in the country, and a guaranteed price when it is time to upgrade.</p>
+      <div class="chips">
+        <span class="chip"><b>5 yr</b> / 1,40,000 km warranty</span>
+        <span class="chip"><b>24×7</b> assistance</span>
+        <span class="chip"><b>6,000+</b> touchpoints</span>
+        <span class="chip"><b>30-day</b> trade-in price</span>
+      </div>
+    </div>
+    <div class="cardzone">
+      <button class="card" id="card" aria-label="Ownership card. Press to flip and see the four benefits." aria-pressed="false">
+        <div class="face front">
+          <div class="row">
+            <div class="cname">Confidence<span>Promise</span></div>
+            <div class="chipgold" aria-hidden="true"></div>
+          </div>
+          <div class="cnum">5Y · 140000KM · 3000+ CITIES</div>
+          <div class="row">
+            <div class="cmeta">Holder<b>Nexa SUV owner</b></div>
+            <div class="cmeta">Valid<b>Yr 1 – Yr 5</b></div>
+            <div class="cmeta">Tier<b>Standard</b></div>
+          </div>
+        </div>
+        <div class="face back">
+          <div class="stripe" aria-hidden="true"></div>
+          <div class="backlist">
+            <div><i>01</i><span><b>Five-year / 1.4 lakh km warranty</b>, standard, not a promotion</span></div>
+            <div><i>02</i><span><b>Covered anywhere</b>: 24×7 assistance with a published response target</span></div>
+            <div><i>03</i><span><b>Upgrade Passport</b>: a binding 30-day trade-in price for any Maruti car</span></div>
+            <div><i>04</i><span><b>Assured buyback</b>: optional, paid, insurer-underwritten</span></div>
+          </div>
+          <div class="cmeta">Concept card · not a contract</div>
+        </div>
+      </button>
+      <p class="hint">Tap the card to turn it over</p>
+    </div>
+  </div>
+
+  <section id="benefits" aria-labelledby="bh">
+    <div class="eyebrow">Explore the benefits</div>
+    <h2 id="bh">What the card actually covers</h2>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="panel" role="tabpanel" id="panel" aria-live="polite"></div>
+  </section>
+
+  <section id="compare" aria-labelledby="ch">
+    <div class="eyebrow">Promise or discount?</div>
+    <h2 id="ch">₹18,000 off today, or the Promise for five years</h2>
+    <p class="lede">Tell us how you will use the car. The comparison updates as you move the controls. A discount is certain on day one; the Promise pays out over the years you own the car.</p>
+    <div class="cmp">
+      <div class="controls">
+        <div class="ctl"><label for="keep">I plan to keep the car <output id="keepO">5 years</output></label><input type="range" id="keep" min="2" max="8" value="5"></div>
+        <div class="ctl"><label for="km">I drive per year <output id="kmO">15,000 km</output></label><input type="range" id="km" min="5000" max="35000" step="1000" value="15000"></div>
+        <div class="ctl"><label for="trip">Driving outside my home city <output id="tripO">30%</output></label><input type="range" id="trip" min="0" max="80" step="5" value="30"></div>
+        <div class="ctl"><span class="lab" id="nextL">My next car will probably be</span>
+          <div class="seg" role="group" aria-labelledby="nextL">
+            <button type="button" id="nextM" aria-pressed="true">A Maruti</button>
+            <button type="button" id="nextO" aria-pressed="false">Not sure</button>
+          </div>
+        </div>
+        <p class="note">Retail-equivalent values are team estimates <span class="tag E">E</span> of what a buyer would otherwise pay for the same cover. They are not quotes.</p>
+      </div>
+      <div class="result">
+        <div class="duel">
+          <div class="offer" id="oCash">
+            <h3>Cash discount <span class="badge" id="bCash" hidden>Better for you</span></h3>
+            <div class="amount" id="vCash">₹18,000<small> on day one</small></div>
+            <div class="lines">
+              <div><span>Paid at delivery</span><span>₹18,000</span></div>
+              <div><span>Cover after year 3</span><span>None</span></div>
+              <div><span>Trade-in price</span><span>Negotiated later</span></div>
+            </div>
+          </div>
+          <div class="offer" id="oProm">
+            <h3>Confidence Promise <span class="badge" id="bProm">Better for you</span></h3>
+            <div class="amount" id="vProm">₹0<small> over ownership</small></div>
+            <div class="lines" id="pLines"></div>
+          </div>
+        </div>
+        <div class="bars" aria-label="Value comparison">
+          <div class="bar"><span>Cash discount</span><div class="track"><div class="fill" id="fCash" style="background:var(--muted);width:50%"></div></div><span class="v" id="tCash">₹18,000</span></div>
+          <div class="bar"><span>Confidence Promise</span><div class="track"><div class="fill" id="fProm" style="background:var(--gold);width:60%"></div></div><span class="v" id="tProm">₹0</span></div>
+          <p class="note" id="verdict"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="mh">
+    <div class="eyebrow">Why it also works for Maruti</div>
+    <h2 id="mh">Cheaper to give, harder to copy</h2>
+    <div class="makerside">
+      <div class="ms"><div class="n">₹8,000</div><p>Expected standard cost per car of the Promise (range ₹6,000 to 11,000) <span class="tag E">E</span></p></div>
+      <div class="ms"><div class="n">₹18,000</div><p>Cash discount per Nexa SUV it replaces, so about ₹10,000 per car comes back as margin <span class="tag E">E</span></p></div>
+      <div class="ms"><div class="n">3,000+</div><p>Cities with Maruti service reach. Assistance is cheap for a network this size and costly for a smaller one to match <span class="tag F">F</span></p></div>
+    </div>
+    <p class="lede">A buyback headline is easy to copy: Kia extended assured buyback of up to 75% across its range on 9 October 2026 <span class="tag F">F</span>. Cover that depends on reach and reliability is not. That is why buyback stays optional here and the warranty, assistance and Upgrade Passport carry the Promise.</p>
+  </section>
+
+  <footer>
+    <div><b>Evidence tags.</b> <span class="tag F">F</span> published fact · <span class="tag P">P</span> primary interview · <span class="tag E">E</span> team estimate.</div>
+    <div>Facts: Maruti 3-year / 1 lakh km standard warranty since 9 July 2024 with paid extensions; select Grand Vitara variants carried a free five-year warranty as a promotion; Kia assured buyback up to 75% (Autocar Professional, 9 Oct 2026); e Vitara buyback up to 60% at 3 years (Maruti Suzuki press release, 17 Feb 2026). Network reach from Maruti Suzuki public statements.</div>
+    <div>Built by Team Xlerites404 (Vanchhita Nigam, Paul Jojo Parokkaran, Shobith Unnithan), XLRI Jamshedpur. Concept only: no offer is made and no data is collected.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const card=document.getElementById('card');
+  card.addEventListener('click',()=>{const f=card.classList.toggle('flipped');card.setAttribute('aria-pressed',f)});
+
+  const B=[
+    {k:'01',name:'Five-year warranty',big:'5 yr<small>/ 1,40,000 km</small>',
+     what:'Manufacturer warranty extended from today\'s standard 3 years / 1 lakh km to 5 years / 1.4 lakh km on every Nexa SUV.',
+     facts:[['Today','3 yr / 1 lakh km standard since July 2024; years 4 to 6 sold as paid extensions <span class="tag F">F</span>'],['Change','Five years becomes standard, replacing the ad hoc "free 5-year warranty" offers <span class="tag F">F</span>'],['Cost to Maruti','₹4,000 to 7,000 per car <span class="tag E">E</span>'],['Control','Claims experience; Maruti\'s internal cost is below the retail extension price']],
+     sc:'Year 4, 92,000 km. The hybrid system needs a repair. Under today\'s terms it is out of warranty unless an extension was bought. Under the Promise it is covered.'},
+    {k:'02',name:'Covered anywhere',big:'24×7<small>for 5 years</small>',
+     what:'Round-the-clock roadside assistance with a committed, published response target, served from Maruti\'s 6,000+ service touchpoints across 3,000+ cities.',
+     facts:[['Reach','6,000+ touchpoints, 3,000+ cities <span class="tag F">F</span>'],['Commitment','A response-time target, with performance published'],['Cost to Maruti','₹1,000 to 2,000 per car <span class="tag E">E</span>'],['Control','Service-level breaches are reported publicly, so the promise stays credible']],
+     sc:'A family drives from Pune to a hill town 300 km away. A tyre fails on a district road at 10 pm. The nearest workshop is a Maruti one, and the response clock is already running.'},
+    {k:'03',name:'Upgrade Passport',big:'30 days<small>binding price</small>',
+     what:'A binding 30-day trade-in price for any Maruti car, valid at Arena or Nexa and priced from True Value data. The owner knows the number before walking in.',
+     facts:[['Who','Any Maruti owner, any Maruti model, either channel'],['Price basis','True Value used-car data, so it tracks the market'],['Cost to Maruti','₹1,000 to 2,000 per use <span class="tag E">E</span>'],['Why rivals can\'t copy it','It needs Maruti\'s installed base and used-car data']],
+     sc:'A Brezza owner in year 5 wants a Grand Vitara. She checks her Passport price at home, it holds for 30 days, and there is nothing left to haggle over at the showroom.'},
+    {k:'04',name:'Assured buyback',big:'Up to 60%<small>at 3 years</small>',
+     what:'An optional, paid buyback, underwritten by an insurer, on the same model as the e Vitara. It is offered, not bundled, because buyback headlines are easy to copy.',
+     facts:[['Terms','Optional and paid, as on the e Vitara (up to 60% at 3 years) <span class="tag F">F</span>'],['Market','Kia now offers up to 75% across its range <span class="tag F">F</span>'],['Cost to Maruti','Paid by the customer'],['Control','Residual-value risk stays with the insurer, off Maruti\'s books']],
+     sc:'A buyer who changes cars every three years pays a small premium and locks a floor on resale. A buyer who keeps cars for eight years simply skips it.'}
+  ];
+  const tabs=document.getElementById('tabs'),panel=document.getElementById('panel');
+  B.forEach((b,i)=>{const t=document.createElement('button');t.className='tab';t.role='tab';t.id='tab'+i;t.innerHTML=`<span class="k">${b.k}</span>${b.name}`;t.addEventListener('click',()=>show(i));t.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=(i+(e.key==='ArrowRight'?1:3))%4;show(n);document.getElementById('tab'+n).focus()}});tabs.appendChild(t)});
+  function show(i){const b=B[i];[...tabs.children].forEach((t,j)=>{t.setAttribute('aria-selected',j===i);t.tabIndex=j===i?0:-1});
+    panel.setAttribute('aria-labelledby','tab'+i);
+    panel.innerHTML=`<div class="main"><div class="big">${b.big}</div><p>${b.what}</p><div class="scenario"><b>How it plays out</b>${b.sc}</div></div><dl class="facts">${b.facts.map(f=>`<div class="fact"><dt>${f[0]}</dt><dd>${f[1]}</dd></div>`).join('')}</dl>`}
+  show(0);
+
+  const $=id=>document.getElementById(id);
+  const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+  let nextMaruti=true;
+  $('nextM').onclick=()=>{nextMaruti=true;$('nextM').setAttribute('aria-pressed','true');$('nextO').setAttribute('aria-pressed','false');calc()};
+  $('nextO').onclick=()=>{nextMaruti=false;$('nextO').setAttribute('aria-pressed','true');$('nextM').setAttribute('aria-pressed','false');calc()};
+  ['keep','km','trip'].forEach(id=>$(id).addEventListener('input',calc));
+  function calc(){
+    const keep=+$('keep').value, km=+$('km').value, trip=+$('trip').value/100;
+    $('keepO').textContent=keep+' years'; $('kmO').textContent=km.toLocaleString('en-IN')+' km'; $('tripO').textContent=Math.round(trip*100)+'%';
+    // Warranty: years 4-5 retail-equivalent ~₹16,000 (E), earned only for years owned beyond 3 and while within 1.4 lakh km
+    const yearsCovered=Math.max(0,Math.min(keep,5)-3);
+    const kmAt3=km*3, kmCap=140000;
+    const kmShare=kmAt3>=kmCap?0:Math.min(1,(kmCap-kmAt3)/(km*Math.max(yearsCovered,1)));
+    const war=8000*yearsCovered*(yearsCovered?kmShare:0);
+    // Assistance: ~₹1,000/yr retail equivalent (E), worth more the more you drive away from home
+    const asst=1000*Math.min(keep,5)*(0.6+trip);
+    // Upgrade Passport: price certainty at trade-in ~₹7,000 (E) if next car is a Maruti and you trade within the window
+    const pass=nextMaruti?7000:2000;
+    const prom=war+asst+pass, cash=18000;
+    $('vProm').innerHTML=inr(prom)+'<small> over ownership</small>';
+    $('pLines').innerHTML=`<div><span>Warranty, years 4 to 5</span><span>${inr(war)}</span></div><div><span>Assistance, ${Math.min(keep,5)} years</span><span>${inr(asst)}</span></div><div><span>Upgrade Passport</span><span>${inr(pass)}</span></div>`;
+    const max=Math.max(prom,cash)*1.1;
+    $('fCash').style.width=(cash/max*100)+'%'; $('fProm').style.width=(prom/max*100)+'%';
+    $('tCash').textContent=inr(cash); $('tProm').textContent=inr(prom);
+    const pWin=prom>cash;
+    $('bProm').hidden=!pWin; $('bCash').hidden=pWin;
+    $('oProm').classList.toggle('win',pWin); $('oCash').classList.toggle('win',!pWin);
+    $('verdict').textContent=pWin
+      ?`For someone who keeps the car ${keep} years, the Promise is worth about ${inr(prom-cash)} more than the discount, and it costs Maruti about ₹10,000 less per car.`
+      :`For someone who sells within ${keep} years, the cash discount is worth more. That buyer is better served by the optional buyback, and the Promise is built for owners who stay.`;
+  }
+  calc();
+})();
+</script>
+</body></html>

@@ -1,0 +1,415 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>Confidence, Everywhere</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a buyer's journey down one page, six numbered stops (compare → proof → cost → promise → upgrade → test drive), each a tool, framed like a spec sheet. */
+:root{
+  --bg:#F3F5FB;       /* page ground, blue-tinted paper */
+  --surface:#FFFFFF;  /* tool panels */
+  --ink:#0B1347;      /* primary text, Maruti navy */
+  --muted:#5A6386;    /* secondary text */
+  --line:#D5DAEC;     /* hairlines */
+  --tint:#E8ECF9;     /* soft fills */
+  --accent:#15237A;   /* interactive blue */
+  --accent-ink:#FFFFFF;
+  --red:#D2232A;      /* brand red, sparing */
+  --good:#227A4B; --warn:#A8670E; --bad:#B4232A;
+  --hero:#0B1347; --hero-text:#FFFFFF; --hero-muted:#B9C3EC;
+  --f-display:"Saira Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#070C2E;--surface:#0F1846;--ink:#EEF1FB;--muted:#A3ACD3;--line:#27316C;--tint:#18225A;--accent:#8EA2FF;--accent-ink:#070C2E;--red:#FF5C62;--good:#5BD69A;--warn:#F2B957;--bad:#FF7A7F;--hero:#040824;--hero-text:#FFFFFF;--hero-muted:#A9B4E4;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#070C2E;--surface:#0F1846;--ink:#EEF1FB;--muted:#A3ACD3;--line:#27316C;--tint:#18225A;--accent:#8EA2FF;--accent-ink:#070C2E;--red:#FF5C62;--good:#5BD69A;--warn:#F2B957;--bad:#FF7A7F;--hero:#040824;--hero-text:#FFFFFF;--hero-muted:#A9B4E4;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(40px,7vw,76px);line-height:.92;font-weight:800;text-transform:uppercase}
+h2{font-size:clamp(28px,4vw,40px);line-height:1;font-weight:700;text-transform:uppercase}
+h3{font-size:20px;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.lede{color:var(--muted);max-width:62ch;font-size:17px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:11px;padding:0 5px;border-radius:4px;border:1px solid var(--line);color:var(--muted);vertical-align:1px;line-height:1.5}
+.tag.F{color:var(--good);border-color:var(--good)} .tag.E{color:var(--warn);border-color:var(--warn)} .tag.I{color:var(--accent);border-color:var(--accent)} .tag.A{color:var(--muted)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.concept{background:var(--red);color:#fff;font-size:13px;font-weight:600}
+.concept .wrap{padding-block:8px;display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:space-between}
+
+/* HERO */
+.hero{background:var(--hero);color:var(--hero-text);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 90% at 90% 0%,rgba(78,107,255,.45),transparent 60%),radial-gradient(40% 60% at 0% 100%,rgba(210,35,42,.35),transparent 60%);pointer-events:none}
+.hero .wrap{position:relative;padding-block:48px 40px;display:grid;gap:28px}
+.hero .lede{color:var(--hero-muted)}
+.hero .eyebrow{color:#FF8A8F}
+.journey{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.stop{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--hero-text);border-top:2px solid rgba(255,255,255,.25);padding-top:10px;transition:border-color .2s}
+.stop:hover{border-color:#FF8A8F}
+.stop .n{font-family:var(--f-mono);font-size:12px;color:#FF8A8F}
+.stop b{font-family:var(--f-display);font-size:20px;font-weight:700;text-transform:uppercase;line-height:1}
+.stop span{font-size:13px;color:var(--hero-muted)}
+.pillars{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--f-mono);font-size:12px;color:var(--hero-muted)}
+.pillars span{border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:3px 10px}
+.pillars b{color:#fff;font-weight:600}
+
+section.step{padding-block:56px 8px}
+.shead{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-items:end;margin-bottom:22px}
+.shead .num{grid-row:1/3;font-family:var(--f-display);font-weight:800;font-size:72px;line-height:.8;color:var(--line)}
+.shead .lede{grid-column:2}
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+
+/* COMPARE */
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.pick{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;display:flex;gap:8px;align-items:center}
+.pick small{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.pick[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pick[aria-pressed="true"] small{color:var(--accent-ink);opacity:.8}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:11px 12px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-display);font-size:24px;font-weight:800;text-transform:uppercase;border-bottom:2px solid var(--ink)}
+thead th small{display:block;font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--red)}
+tbody th{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:150px}
+.stars{color:var(--red);letter-spacing:2px}
+.none{color:var(--muted)}
+
+/* PROOF */
+.proof{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.proof > *{min-width:0}
+.score{display:grid;gap:14px}
+.srow{display:grid;grid-template-columns:150px 1fr 92px;gap:12px;align-items:center;font-size:14px}
+.srow .t{height:12px;background:var(--tint);border-radius:6px;overflow:hidden}
+.srow .f{height:100%;background:var(--accent);border-radius:6px;transition:width .8s ease}
+.srow .v{font-family:var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ptab{border:1px solid var(--line);background:transparent;border-radius:8px;padding:6px 12px;font-weight:600;cursor:pointer}
+.ptab[aria-selected="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.callout{border-left:3px solid var(--red);padding-left:12px;font-size:14px;color:var(--muted)}
+.reach{display:grid;gap:14px;align-content:start}
+.figure{font-family:var(--f-display);font-weight:800;font-size:56px;line-height:.9}
+.figure small{font-size:18px;font-weight:600;color:var(--muted);margin-left:4px}
+blockquote{margin:0;padding:12px 0 0;border-top:1px solid var(--line);font-size:15px}
+blockquote cite{display:block;font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px}
+
+/* COST */
+.cost{display:grid;grid-template-columns:300px 1fr;gap:16px}
+.cost > *{min-width:0}
+.form{display:grid;gap:16px;align-content:start}
+.fld{display:grid;gap:6px}
+.fld label{font-size:14px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.fld output{font-family:var(--f-mono);font-weight:500;color:var(--accent)}
+select,input[type=text],input[type=number]{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.out{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:6px;align-content:start}
+.out .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.out .amt{font-family:var(--f-display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.out .sub{font-size:13px;color:var(--muted)}
+.delta{margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--tint);display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+.delta b{font-family:var(--f-display);font-size:28px;font-weight:800}
+.yrs{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.yr{display:grid;gap:4px;font-size:12px;text-align:center}
+.yr .cell{height:30px;border-radius:6px;display:grid;place-items:center;font-family:var(--f-mono);font-size:11px;font-weight:600}
+.cell.std{background:var(--tint);color:var(--ink)}
+.cell.prom{background:var(--red);color:#fff}
+.cell.off{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+
+/* PROMISE */
+.promise{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:8px;align-content:start;cursor:pointer;text-align:left}
+.pcard .k{font-family:var(--f-mono);font-size:11px;color:var(--red)}
+.pcard .big{font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1}
+.pcard p{font-size:14px;color:var(--muted)}
+.pcard .more{font-size:14px;color:var(--ink);border-top:1px solid var(--line);padding-top:8px}
+.pcard[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:16px;background:var(--ink);color:var(--surface);text-decoration:none;font-weight:700;padding:12px 18px;border-radius:10px}
+.cta:hover{background:var(--red);color:#fff}
+
+/* PASSPORT */
+.pass{display:grid;grid-template-columns:300px 1fr;gap:16px}
+.pass > *{min-width:0}
+.ticket{border:2px dashed var(--accent);border-radius:14px;padding:20px;display:grid;gap:12px;align-content:start;position:relative}
+.ticket .range{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,5vw,48px);line-height:1;font-variant-numeric:tabular-nums}
+.ticket .valid{font-family:var(--f-mono);font-size:12px;color:var(--good)}
+.ladder{display:grid;gap:8px}
+.rung{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 12px;border-radius:10px;background:var(--tint);font-size:14px}
+.rung span:last-child{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* TEST DRIVE */
+.drive{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.drive > *{min-width:0}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mode{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);cursor:pointer;text-align:left;display:grid;gap:2px}
+.mode b{font-size:15px}
+.mode span{font-size:12.5px;color:var(--muted)}
+.mode[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.submit{background:var(--red);color:#fff;border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;justify-self:start}
+.confirm{display:grid;gap:12px;align-content:start}
+.confirm ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}
+.demo{font-family:var(--f-mono);font-size:12px;color:var(--warn)}
+
+footer{margin-top:64px;border-top:1px solid var(--line);padding-block:24px 48px;font-size:13px;color:var(--muted);display:grid;gap:8px}
+footer a{color:var(--accent)}
+
+@media (max-width:900px){
+  .journey{grid-template-columns:repeat(3,1fr)}
+  .proof,.cost,.pass,.drive{grid-template-columns:1fr}
+  .promise{grid-template-columns:1fr 1fr}
+}
+@media (max-width:520px){
+  .journey{grid-template-columns:1fr 1fr}
+  .promise,.duo,.modes{grid-template-columns:1fr}
+  .srow{grid-template-columns:1fr 80px}.srow .t{grid-column:1/-1;grid-row:2}
+  .shead .num{font-size:52px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="concept"><div class="wrap"><span>Concept prototype by Team Xlerites404, XLRI Jamshedpur, for Maruti Suzuki XCELerate 2026 (B-Track)</span><span>Not an official Maruti Suzuki website. No booking is made and no data is collected.</span></div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">An SUV buying journey built on proof</div>
+    <h1>Confidence,<br>Everywhere</h1>
+    <p class="lede">Compare Maruti's SUVs on what they have proven, see what five years will really cost, and get a written promise in place of a haggled discount.</p>
+    <nav class="journey" aria-label="Journey">
+      <a class="stop" href="#compare"><span class="n">01</span><b>Compare</b><span>One clear job per SUV</span></a>
+      <a class="stop" href="#proof"><span class="n">02</span><b>Proof</b><span>Crash scores and reach</span></a>
+      <a class="stop" href="#cost"><span class="n">03</span><b>Cost</b><span>Five years, in rupees</span></a>
+      <a class="stop" href="#promise"><span class="n">04</span><b>Promise</b><span>Cover, not a discount</span></a>
+      <a class="stop" href="#upgrade"><span class="n">05</span><b>Upgrade</b><span>Your car's price, locked</span></a>
+      <a class="stop" href="#drive"><span class="n">06</span><b>Test drive</b><span>At home or for 24 hours</span></a>
+    </nav>
+    <div class="pillars" aria-label="Strategy pillars shown on this page">
+      <span><b>Portfolio</b> → Compare</span><span><b>Discovery</b> → Proof</span><span><b>Experience</b> → Promise, Test drive</span><span><b>Value migration</b> → Upgrade Passport</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="step" id="compare" aria-labelledby="h1c">
+  <div class="shead"><div class="num" aria-hidden="true">01</div><h2 id="h1c">Compare on proof</h2><p class="lede">Pick up to three. Each SUV has one job in the range, so the choice is about fit, not about which showroom offers more off.</p></div>
+  <div class="tool">
+    <div class="picker" id="picker" role="group" aria-label="Choose SUVs to compare"></div>
+    <div class="scroll"><table id="ctable"></table></div>
+    <p class="lede" style="font-size:13px;margin-top:12px">Prices are ex-showroom ranges as reported in 2026 <span class="tag F">F</span>; check current prices before buying. Economy figures are approximate claimed (ARAI) values. "Best for" is our recommendation <span class="tag I">I</span>.</p>
+  </div>
+</section>
+
+<section class="step" id="proof" aria-labelledby="h2p">
+  <div class="shead"><div class="num" aria-hidden="true">02</div><h2 id="h2p">Proof, not claims</h2><p class="lede">Independent crash scores and a service network you can count. This is the evidence a showroom should lead with.</p></div>
+  <div class="proof">
+    <div class="tool">
+      <div class="ptabs" role="tablist" id="ptabs"></div>
+      <div class="score" id="score" role="tabpanel"></div>
+    </div>
+    <div class="tool reach">
+      <div><div class="figure" id="cnt1">6,000<small>+ touchpoints</small></div><p class="lede" style="font-size:15px">Maruti service touchpoints across <b>3,000+ cities</b> <span class="tag F">F</span>. Help is near on the highway, not only in the metro.</p></div>
+      <blockquote>"5-star safety rating... definitely gives more confidence on the road."<cite>Victoris owner, CarDekho review <span class="tag A">A</span></cite></blockquote>
+      <blockquote>"The Grand Vitara may not make headlines, but it gives me peace of mind."<cite>Grand Vitara owner, June 2025 <span class="tag A">A</span></cite></blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="cost" aria-labelledby="h3c">
+  <div class="shead"><div class="num" aria-hidden="true">03</div><h2 id="h3c">Five years, in rupees</h2><p class="lede">Fuel is the cost buyers feel every week. Set your own driving and fuel price and compare two SUVs side by side.</p></div>
+  <div class="tool cost">
+    <div class="form">
+      <div class="fld"><label for="ca">SUV A</label><select id="ca"></select></div>
+      <div class="fld"><label for="cb">SUV B</label><select id="cb"></select></div>
+      <div class="fld"><label for="ckm">I drive per year <output id="ckmO"></output></label><input type="range" id="ckm" min="5000" max="35000" step="1000" value="15000"></div>
+      <div class="fld"><label for="cfuel">Petrol price per litre <output id="cfuelO"></output></label><input type="range" id="cfuel" min="90" max="115" step="0.5" value="103"></div>
+      <div class="fld"><label for="creal">Real-world share of claimed mileage <output id="crealO"></output></label><input type="range" id="creal" min="60" max="100" step="5" value="80"></div>
+    </div>
+    <div>
+      <div class="duo">
+        <div class="out"><span class="lbl" id="naA"></span><span class="amt" id="amA"></span><span class="sub" id="suA"></span></div>
+        <div class="out"><span class="lbl" id="naB"></span><span class="amt" id="amB"></span><span class="sub" id="suB"></span></div>
+      </div>
+      <div class="delta" id="delta"></div>
+      <div class="yrs" aria-label="Warranty cover by year">
+        <div class="yr"><div class="cell std">Yr 1</div>Standard</div>
+        <div class="yr"><div class="cell std">Yr 2</div>Standard</div>
+        <div class="yr"><div class="cell std">Yr 3</div>Standard</div>
+        <div class="yr"><div class="cell prom" id="y4">Yr 4</div><span id="y4t">Promise</span></div>
+        <div class="yr"><div class="cell prom" id="y5">Yr 5</div><span id="y5t">Promise</span></div>
+      </div>
+      <p class="lede" style="font-size:13px;margin-top:10px">Fuel cost only, at your settings <span class="tag E">E</span>. Insurance, service and resale are left out because they depend on city and variant. Strip: standard warranty is 3 years / 1 lakh km <span class="tag F">F</span>; the Promise would add years 4 and 5 on Nexa SUVs.</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="promise" aria-labelledby="h4p">
+  <div class="shead"><div class="num" aria-hidden="true">04</div><h2 id="h4p">The Confidence Promise</h2><p class="lede">Proposed in place of a cash discount on Nexa SUVs. Tap a benefit for the terms.</p></div>
+  <div class="promise" id="pgrid"></div>
+  <a class="cta" href="promise.html" >Open the Promise card and compare it with ₹18,000 off →</a>
+</section>
+
+<section class="step" id="upgrade" aria-labelledby="h5u">
+  <div class="shead"><div class="num" aria-hidden="true">05</div><h2 id="h5u">Upgrade Passport</h2><p class="lede">Already own a Maruti? See an indicative trade-in price before you visit. Under the proposal, the real Passport price is binding for 30 days at any Arena or Nexa outlet.</p></div>
+  <div class="tool pass">
+    <div class="form">
+      <div class="fld"><label for="ucar">My current car</label><select id="ucar"><option>Swift</option><option>Baleno</option><option>Dzire</option><option>WagonR</option><option>Brezza</option><option>Ertiga</option><option>Alto K10</option></select></div>
+      <div class="fld"><label for="upaid">Price I paid <output id="upaidO"></output></label><input type="range" id="upaid" min="4" max="14" step="0.25" value="7.5"></div>
+      <div class="fld"><label for="uage">Age of car <output id="uageO"></output></label><input type="range" id="uage" min="1" max="10" value="5"></div>
+      <div class="fld"><label for="ukm">Odometer <output id="ukmO"></output></label><input type="range" id="ukm" min="5000" max="150000" step="5000" value="60000"></div>
+      <div class="fld"><label for="utar">I'd like to move up to</label><select id="utar"><option value="grand">Grand Vitara (from ₹10.77 lakh)</option><option value="vic">Victoris (from ₹10.50 lakh)</option></select></div>
+    </div>
+    <div class="ticket">
+      <span class="eyebrow">Indicative Passport price</span>
+      <div class="range" id="urange"></div>
+      <span class="valid" id="uvalid"></span>
+      <div class="ladder" id="uladder"></div>
+      <p class="lede" style="font-size:13px">Illustration only: a simple age-and-kilometre formula, not True Value data <span class="tag E">E</span>. The proposed Passport would price from True Value's used-car data.</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="drive" aria-labelledby="h6d">
+  <div class="shead"><div class="num" aria-hidden="true">06</div><h2 id="h6d">Book a test drive</h2><p class="lede">Choose how you want to try it. This is a demonstration: nothing is sent and no personal details are asked for.</p></div>
+  <div class="tool drive">
+    <form id="dform" class="form" novalidate>
+      <div class="fld"><label for="dcar">SUV</label><select id="dcar"></select></div>
+      <div class="fld"><span style="font-size:14px;font-weight:600" id="dmodeL">Format</span>
+        <div class="modes" role="group" aria-labelledby="dmodeL">
+          <button type="button" class="mode" data-m="home" aria-pressed="true"><b>At home</b><span>Car at your door within 24 hours</span></button>
+          <button type="button" class="mode" data-m="day" aria-pressed="false"><b>24-hour drive</b><span>Keep it overnight, try your own routes</span></button>
+          <button type="button" class="mode" data-m="store" aria-pressed="false"><b>At the outlet</b><span>With a side-by-side twin drive</span></button>
+        </div>
+      </div>
+      <div class="fld"><label for="dcity">City</label><select id="dcity"><option>Jamshedpur</option><option>Pune</option><option>Lucknow</option><option>Indore</option><option>Kochi</option><option>Delhi NCR</option><option>Bengaluru</option></select></div>
+      <div class="fld"><label for="dslot">Preferred slot</label><select id="dslot"><option>Tomorrow, morning</option><option>Tomorrow, evening</option><option>This weekend</option></select></div>
+      <button class="submit" type="submit">See my test-drive plan</button>
+    </form>
+    <div class="confirm" id="dconf" aria-live="polite">
+      <span class="eyebrow">What happens next</span>
+      <h3 id="dtitle">Choose a format and press the button</h3>
+      <ol id="dsteps">
+        <li>One consultant owns your enquiry from first call to delivery.</li>
+        <li>The drive starts with the proof: crash scores and the Promise terms.</li>
+        <li>You get one transparent price with the Promise, not a negotiated discount.</li>
+      </ol>
+      <span class="demo" id="ddemo" hidden>Demo only. No booking has been made and nothing was sent.</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <div><b>Evidence tags.</b> <span class="tag F">F</span> published fact · <span class="tag A">A</span> owner anecdote · <span class="tag I">I</span> team inference or recommendation · <span class="tag E">E</span> team estimate.</div>
+  <div>Sources: Global NCAP and Bharat NCAP results for the Victoris; Bharat NCAP for the Brezza; Victoris and Grand Vitara price ranges from 2026 launch and price reporting; Maruti Suzuki public statements on network reach and on the 3-year / 1 lakh km standard warranty (from 9 July 2024). Our search found no published Indian crash rating for the Grand Vitara, Fronx or Jimny; that is a negative finding and may change.</div>
+  <div>Built by Team Xlerites404 (Vanchhita Nigam, Paul Jojo Parokkaran, Shobith Unnithan), XLRI Jamshedpur, as a concept for XCELerate 2026. Not affiliated with or endorsed by Maruti Suzuki.</div>
+</footer>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const M={
+  fronx:{name:'Fronx',ch:'Nexa',seg:'Compact crossover',job:'Style-led entry to Nexa SUVs',pt:'1.2 petrol, 1.0 turbo, CNG',price:'See current price list',safe:null,econ:'~21.8 km/l (1.2 MT)',best:'First SUV for a young urban buyer'},
+  brezza:{name:'Brezza',ch:'Arena',seg:'Compact SUV',job:'The trusted family compact',pt:'1.5 petrol mild hybrid, CNG',price:'See current price list',safe:{stars:5,body:'Bharat NCAP'},econ:'~19.8 km/l (AT)',best:'Upgrading from a hatch on a budget'},
+  victoris:{name:'Victoris',ch:'Arena',seg:'Mid-size SUV',job:'Proof-led mid-size for the mass market',pt:'Petrol mild hybrid, strong hybrid, CNG, AWD',price:'₹10.50–19.99 lakh',safe:{stars:5,body:'Global NCAP and Bharat NCAP'},econ:'~28.6 km/l (strong hybrid)',best:'Families who want the safest-proven Maruti'},
+  grand:{name:'Grand Vitara',ch:'Nexa',seg:'Mid-size SUV',job:'Nexa flagship: hybrid, AWD, premium',pt:'Mild hybrid, strong hybrid, AWD',price:'₹10.77–19.57 lakh',safe:null,econ:'~28.0 km/l (strong hybrid)',best:'Long-distance drivers who want hybrid and premium'},
+  jimny:{name:'Jimny',ch:'Nexa',seg:'Lifestyle 4×4',job:'The off-road icon',pt:'1.5 petrol, 4WD',price:'See current price list',safe:null,econ:'~16.4 km/l (AT)',best:'Enthusiasts and hill-state buyers'}
+};
+let chosen=['victoris','grand','brezza'];
+const picker=$('picker');
+Object.entries(M).forEach(([k,m])=>{const b=document.createElement('button');b.type='button';b.className='pick';b.dataset.k=k;b.innerHTML=`${m.name} <small>${m.ch}</small>`;b.onclick=()=>{if(chosen.includes(k)){if(chosen.length>1)chosen=chosen.filter(x=>x!==k)}else{chosen.push(k);if(chosen.length>3)chosen.shift()}renderCmp()};picker.appendChild(b)});
+function renderCmp(){
+  [...picker.children].forEach(b=>b.setAttribute('aria-pressed',chosen.includes(b.dataset.k)));
+  const ms=chosen.map(k=>M[k]);
+  const row=(lab,f)=>`<tr><th scope="row">${lab}</th>${ms.map(m=>`<td>${f(m)}</td>`).join('')}</tr>`;
+  $('ctable').innerHTML=`<thead><tr><th></th>${ms.map(m=>`<th scope="col"><small>${m.ch}</small>${m.name}</th>`).join('')}</tr></thead><tbody>`+
+   row('Its job',m=>m.job)+row('Segment',m=>m.seg)+row('Ex-showroom',m=>m.price)+row('Powertrains',m=>m.pt)+row('Economy',m=>m.econ)+
+   row('Crash proof',m=>m.safe?`<span class="stars" aria-label="${m.safe.stars} stars">★★★★★</span><br>${m.safe.body}`:`<span class="none">No published Indian rating found</span>`)+
+   row('Promise',m=>m.ch==='Nexa'?'Full Confidence Promise (proposed)':'Standard 3-yr warranty; Upgrade Passport applies')+
+   row('Best for',m=>m.best)+'</tbody>';
+}
+renderCmp();
+
+/* Proof */
+const P={
+  victoris:{label:'Victoris',rows:[['Global NCAP, adult',33.72,34],['Global NCAP, child',41,49],['Bharat NCAP, adult',31.66,32],['Bharat NCAP, child',43,49]],note:'Five stars from both Global NCAP and Bharat NCAP.'},
+  brezza:{label:'Brezza',rows:null,note:'Five-star Bharat NCAP rating. Use the official BNCAP report for point scores.'},
+  grand:{label:'Grand Vitara',rows:null,note:'No published Indian crash rating found. Our strategy recommends submitting it to Bharat NCAP before its facelift, so the Nexa flagship carries the same proof as the Victoris.'}
+};
+const ptabs=$('ptabs');
+Object.entries(P).forEach(([k,p],i)=>{const t=document.createElement('button');t.className='ptab';t.role='tab';t.textContent=p.label;t.onclick=()=>showP(k);t.dataset.k=k;ptabs.appendChild(t)});
+function showP(k){const p=P[k];[...ptabs.children].forEach(t=>t.setAttribute('aria-selected',t.dataset.k===k));
+  $('score').innerHTML=(p.rows?p.rows.map(r=>`<div class="srow"><span>${r[0]}</span><div class="t"><div class="f" style="width:0" data-w="${r[1]/r[2]*100}"></div></div><span class="v">${r[1]} / ${r[2]}</span></div>`).join(''):`<div class="figure" style="color:var(--${k==='grand'?'muted':'red'})">${k==='grand'?'Not rated':'★★★★★'}</div>`)+`<p class="callout">${p.note} <span class="tag ${k==='grand'?'I':'F'}">${k==='grand'?'I':'F'}</span></p>`;
+  requestAnimationFrame(()=>document.querySelectorAll('#score .f').forEach(f=>f.style.width=f.dataset.w+'%'));}
+showP('victoris');
+
+/* Cost */
+const C=[['grand-sh','Grand Vitara strong hybrid',27.97],['vic-sh','Victoris strong hybrid',28.65],['grand-mh','Grand Vitara mild hybrid',21.1],['vic-mh','Victoris mild hybrid',21.2],['brezza','Brezza petrol',19.8],['fronx','Fronx 1.2 petrol',21.8],['jimny','Jimny petrol',16.4]];
+['ca','cb'].forEach((id,j)=>{const s=$(id);C.forEach(c=>{const o=document.createElement('option');o.value=c[0];o.textContent=`${c[1]} (~${c[2]} km/l)`;s.appendChild(o)});s.value=j?'grand-mh':'grand-sh';s.onchange=cost});
+['ckm','cfuel','creal'].forEach(id=>$(id).addEventListener('input',cost));
+function cost(){
+  const km=+$('ckm').value,fp=+$('cfuel').value,rl=+$('creal').value/100;
+  $('ckmO').textContent=km.toLocaleString('en-IN')+' km';$('cfuelO').textContent='₹'+fp.toFixed(1);$('crealO').textContent=Math.round(rl*100)+'%';
+  const f=id=>{const c=C.find(x=>x[0]===id);const kpl=c[2]*rl;return{n:c[1],kpl,cost:km*5/kpl*fp}};
+  const a=f($('ca').value),b=f($('cb').value);
+  $('naA').textContent=a.n;$('amA').textContent=inr(a.cost);$('suA').textContent=`5-year fuel at ~${a.kpl.toFixed(1)} km/l real-world`;
+  $('naB').textContent=b.n;$('amB').textContent=inr(b.cost);$('suB').textContent=`5-year fuel at ~${b.kpl.toFixed(1)} km/l real-world`;
+  const d=Math.abs(a.cost-b.cost),cheaper=a.cost<b.cost?a.n:b.n;
+  $('delta').innerHTML=d<500?`<span>Fuel costs are about the same at these settings.</span>`:`<b>${inr(d)}</b><span>less fuel over five years with the <strong>${cheaper}</strong>, about ${inr(d/60)} a month.</span>`;
+  const over=km*3>100000;
+  ['y4','y5'].forEach(y=>{$(y).className='cell prom'});
+  $('y4t').textContent='Promise';$('y5t').textContent=km*5>140000?'Promise, to 1.4 lakh km':'Promise';
+  if(over){$('y4t').textContent='Promise (std. ends at 1 lakh km)'}
+}
+cost();
+
+/* Promise grid */
+const PR=[
+  ['01','5 yr / 1.4 lakh km','Warranty','Standard on every Nexa SUV, up from today\'s 3 years / 1 lakh km. Replaces ad hoc "free 5-year warranty" offers.'],
+  ['02','24×7, 5 yrs','Covered anywhere','Roadside assistance with a published response target, served from 6,000+ touchpoints in 3,000+ cities.'],
+  ['03','30-day price','Upgrade Passport','A binding trade-in price for any Maruti car, valid at Arena or Nexa, priced from True Value data.'],
+  ['04','Optional','Assured buyback','Paid and insurer-underwritten, as on the e Vitara (up to 60% at 3 years). Kept optional because buyback headlines are easy to copy.']
+];
+const pg=$('pgrid');
+PR.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='pcard';b.setAttribute('aria-expanded','false');b.innerHTML=`<span class="k">${p[0]} · ${p[2]}</span><span class="big">${p[1]}</span><span class="more" hidden>${p[3]}</span><p>Tap for terms</p>`;
+  b.onclick=()=>{const open=b.getAttribute('aria-expanded')!=='true';b.setAttribute('aria-expanded',open);b.querySelector('.more').hidden=!open;b.querySelector('p').textContent=open?'Tap to close':'Tap for terms'};pg.appendChild(b)});
+pg.firstChild.click();
+
+/* Passport */
+['upaid','uage','ukm','ucar','utar'].forEach(id=>$(id).addEventListener('input',pass));
+function pass(){
+  const paid=+$('upaid').value,age=+$('uage').value,km=+$('ukm').value;
+  $('upaidO').textContent='₹'+paid.toFixed(2)+' lakh';$('uageO').textContent=age+(age===1?' year':' years');$('ukmO').textContent=km.toLocaleString('en-IN')+' km';
+  const resid=Math.max(0.22,0.88*Math.pow(0.9,age-1));
+  const kmAdj=Math.max(-0.12,Math.min(0.05,(age*12000-km)/1000*0.0012));
+  const mid=paid*(resid+kmAdj)*100000;
+  const lo=mid*0.95,hi=mid*1.03;
+  $('urange').textContent=`${inr(lo)} – ${inr(hi)}`;
+  const t=new Date();t.setDate(t.getDate()+30);
+  $('uvalid').textContent=`Proposed: held for 30 days, until ${t.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}`;
+  const tgt=$('utar').value==='grand'?{n:'Grand Vitara',p:1077000}:{n:'Victoris',p:1050000};
+  const gap=tgt.p-mid;
+  $('uladder').innerHTML=`<div class="rung"><span>${tgt.n}, entry ex-showroom</span><span>${inr(tgt.p)}</span></div><div class="rung"><span>Your ${$('ucar').value}, Passport midpoint</span><span>− ${inr(mid)}</span></div><div class="rung" style="background:var(--ink);color:var(--surface)"><span>Amount to move up</span><span>${inr(Math.max(0,gap))}</span></div>`;
+}
+pass();
+
+/* Test drive */
+const dcar=$('dcar');Object.values(M).forEach(m=>{const o=document.createElement('option');o.textContent=m.name;dcar.appendChild(o)});dcar.value='Grand Vitara';
+let mode='home';
+document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('.mode').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+$('dform').addEventListener('submit',e=>{e.preventDefault();
+  const car=dcar.value,city=$('dcity').value,slot=$('dslot').value.toLowerCase();
+  const isNexa=Object.values(M).find(m=>m.name===car).ch==='Nexa';
+  const first={home:`A ${car} arrives at your address in ${city}, ${slot}.`,day:`You collect a ${car} in ${city} ${slot} and keep it for 24 hours.`,store:`You drive the ${car} back to back with its closest alternative at a ${city} outlet, ${slot}.`}[mode];
+  $('dtitle').textContent=`Your ${car} test-drive plan`;
+  $('dsteps').innerHTML=`<li>${first}</li><li>Your consultant opens with the proof: crash scores, real-world economy, and the service points along your usual routes.</li><li>${isNexa?'The Confidence Promise terms are explained in writing before any price talk.':'You see the standard warranty and the Upgrade Passport price for your current car.'}</li><li>You receive one transparent on-road price. There is no discount to negotiate.</li>`;
+  $('ddemo').hidden=false;});
+})();
+</script>
+</body></html>
